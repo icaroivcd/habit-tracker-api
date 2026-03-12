@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/habits")
 public class HabitController {
 
     @Autowired
     private HabitService habitService;
 
-    @GetMapping("/get-habits")
+    @GetMapping("")
     public List<Habit> getHabits() {
         return habitService.getAllHabits();
     }
