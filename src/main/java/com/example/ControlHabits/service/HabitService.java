@@ -25,4 +25,27 @@ public class HabitService {
 
     }
 
+    public void deleteHabit(Long id) {
+        habitRepository.deleteById(id);
+    }
+
+    public Habit getHabitById(Long id) {
+        if(habitRepository.findById(id).isPresent()){
+            return habitRepository.findById(id).orElse(null);
+        } else {
+            return null;
+        }
+    }
+
+    public Habit updateHabit(Long id, Habit habit) {
+        Habit existingHabit = getHabitById(id);
+        if (habit.getName() != null) {
+            existingHabit.setName(habit.getName());
+        }
+        if (habit.getDescription() != null) {
+            existingHabit.setDescription(habit.getDescription());
+        }
+        return habitRepository.save(existingHabit);
+
+    }
 }
