@@ -5,53 +5,55 @@ import com.example.ControlHabits.dto.UpdateHabitDTO;
 import com.example.ControlHabits.entity.Habit;
 import com.example.ControlHabits.service.HabitService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/habits")
 public class HabitController {
 
-    @Autowired
-    private HabitService habitService;
+    private final HabitService habitService;
 
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<Void> deleteHabit(@PathVariable Long id) {
-        habitService.deleteHabit(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public HabitController(HabitService habitService) {
+        this.habitService = habitService;
     }
 
-    @GetMapping("")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteHabit(@PathVariable Long id) {
+        habitService.deleteHabit(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
     public List<Habit> getHabits() {
         return habitService.getAllHabits();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Habit> getHabitById(@PathVariable Long id) {
-        Habit habitId = habitService.getHabitById(id);
-        if (habitId == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<>(habitId, HttpStatus.OK);
+        Habit habit = habitService.getHabitById(id);
+        return new ResponseEntity<>(habit, HttpStatus.OK);
     }
 
-    @PostMapping("/create-habit")
-    public ResponseEntity<Habit> createHabits(@Valid @RequestBody CreateHabitDTO habit) {
-        Habit created = habitService.createHabits(habit);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    @PostMapping
+    public ResponseEntity<Habit> createHabit(@Valid @RequestBody CreateHabitDTO habit) {
+        Habit created = habitService.createHabit(habit);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(created.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(created);
     }
 
-    @PatchMapping("/update/{id}")
-    public ResponseEntity<Habit> updateHabit(@PathVariable Long id, @RequestBody UpdateHabitDTO habit) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Habit> updateHabit(@PathVariable Long id, @Valid @RequestBody UpdateHabitDTO habit) {
         Habit updatedHabit = habitService.updateHabit(id, habit);
-
-        if(updatedHabit == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(updatedHabit);
     }
 }
