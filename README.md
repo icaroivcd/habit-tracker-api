@@ -45,7 +45,7 @@ A API é exposta sob o caminho base `/habits`.
 
 ### 1. Criar um Novo Hábito
 
-*   **URL:** `/habits/create-habit`
+*   **URL:** `/habits`
 *   **Método:** `POST`
 *   **Corpo da Requisição (JSON - `CreateHabitDTO`):**
     ```json
@@ -109,7 +109,7 @@ A API é exposta sob o caminho base `/habits`.
 
 ### 4. Atualizar um Hábito Existente (Atualização Parcial)
 
-*   **URL:** `/habits/update/{id}`
+*   **URL:** `/habits/{id}`
 *   **Método:** `PATCH`
 *   **Parâmetros de Caminho:**
     *   `id` (Long): O ID do hábito a ser atualizado.
@@ -131,16 +131,18 @@ A API é exposta sob o caminho base `/habits`.
     ```
 *   **Códigos de Status:**
     *   `200 OK`: Se o hábito for atualizado com sucesso.
+    *   `400 Bad Request`: Se nenhum campo for informado ou se `name` vier em branco.
     *   `404 Not Found`: Se nenhum hábito com o ID fornecido existir.
 
 ### 5. Deletar um Hábito
 
-*   **URL:** `/habits/delete/{id}`
+*   **URL:** `/habits/{id}`
 *   **Método:** `DELETE`
 *   **Parâmetros de Caminho:**
     *   `id` (Long): O ID do hábito a ser deletado.
 *   **Resposta:** (Sem Conteúdo)
 *   **Códigos de Status:**
-    *   `204 No Content`: Se o hábito for deletado com sucesso (ou se o hábito não existia, a operação é idempotente).
+    *   `204 No Content`: Se o hábito for deletado com sucesso.
+    *   `404 Not Found`: Se nenhum hábito com o ID fornecido existir.
 
 ---
