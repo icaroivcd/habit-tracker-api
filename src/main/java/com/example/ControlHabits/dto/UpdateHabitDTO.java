@@ -1,11 +1,16 @@
 package com.example.ControlHabits.dto;
 
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Size;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class UpdateHabitDTO {
 
+    @Size(max = 120)
     private String name;
+
+    @Size(max = 255)
     private String description;
 
     public UpdateHabitDTO(String name, String description) {
